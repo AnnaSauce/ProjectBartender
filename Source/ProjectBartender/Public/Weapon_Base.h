@@ -18,12 +18,14 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Fire(FVector Reticle, FVector Direction);
 	virtual void Fire_Implementation(FVector Reticle, FVector Direction);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void StopFiring();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> _Mesh;
 
@@ -34,11 +36,11 @@ protected:
 
 	//Ammo variables for reloading and storing data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int AmmoInClip;
+	int AmmoInClip; //Ammo in the gun
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int ClipCapacity;
+	int ClipCapacity; //How much the gun can hold
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int TotalAmmo;
+	int TotalAmmo; //Ammo in player inventory
 
 	
 };

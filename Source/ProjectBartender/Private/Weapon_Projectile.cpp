@@ -11,8 +11,8 @@ AWeapon_Projectile::AWeapon_Projectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	_Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Muzzle"));
-	_Arrow->SetupAttachment(_Mesh);
+	_Muzzle = CreateDefaultSubobject<UArrowComponent>(TEXT("Muzzle"));
+	_Muzzle->SetupAttachment(_Mesh);
 }
 
 // Called when the game starts or when spawned

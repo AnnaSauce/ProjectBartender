@@ -19,8 +19,23 @@ void AWeapon_Base::BeginPlay()
 
 void AWeapon_Base::Fire_Implementation(FVector Reticle, FVector Direction)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Fire_Implementation"));
+}
+
+void AWeapon_Base::Reload_Implementation()
+{
+	AmmoInClip = ClipCapacity; //Delete this line if stored ammo will be used.
 	
-	UE_LOG(LogTemp, Warning, TEXT("YIPPPEEEEE"));
+	//Below commented code is for if there will be stored ammo as for now there is no ammo inventory
+	/*int ammoNeeded = ClipCapacity - AmmoInClip;
+	if(TotalAmmo >= ammoNeeded)
+	{
+		TotalAmmo -= ammoNeeded;
+		AmmoInClip = ClipCapacity;
+	}*/
+	
+	
+	UE_LOG(LogTemp, Warning, TEXT("Reload"));
 }
 
 void AWeapon_Base::StopFiring()
