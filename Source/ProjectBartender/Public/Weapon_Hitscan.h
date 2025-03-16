@@ -18,7 +18,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
 	virtual void Fire_Implementation(FVector Reticle, FVector Direction) override;
 
 };
