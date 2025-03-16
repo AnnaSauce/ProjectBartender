@@ -9,7 +9,7 @@ AWeapon_Base::AWeapon_Base()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	RootComponent = _Mesh;
+	_Mesh->SetupAttachment(RootComponent);
 }
 
 void AWeapon_Base::BeginPlay()

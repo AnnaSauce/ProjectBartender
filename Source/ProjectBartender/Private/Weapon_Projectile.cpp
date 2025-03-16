@@ -3,7 +3,9 @@
 
 #include "Weapon_Projectile.h"
 
+#include "Projectile.h"
 #include "Components/ArrowComponent.h"
+#include "Tasks/GameplayTask_SpawnActor.h"
 
 
 // Sets default values
@@ -26,6 +28,14 @@ void AWeapon_Projectile::Fire_Implementation(FVector Reticle, FVector Direction)
 {
 	Super::Fire_Implementation(Reticle, Direction);
 	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE"));
+
+	UWorld* const world = GetWorld();
+	if(world == nullptr) { return; }
+	FActorSpawnParameters spawnParams;
+	spawnParams.Owner = GetOwner();
+	spawnParams.Instigator = GetInstigator();
+	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	world->SpawnActor(_ProjectileClass, &_Muzzle->GetComponentTransform(), spawnParams);
 }
 
 

@@ -6,6 +6,7 @@
 #include "Weapon_Base.h"
 #include "Weapon_Projectile.generated.h"
 
+class AProjectile;
 class UArrowComponent;
 
 UCLASS()
@@ -24,4 +25,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UArrowComponent> _Muzzle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AProjectile> _ProjectileClass;
 };
