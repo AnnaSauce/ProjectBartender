@@ -6,6 +6,7 @@
 #include "Weapon_Base.h"
 #include "Weapon_Projectile.generated.h"
 
+class AProjectile;
 class UArrowComponent;
 
 UCLASS()
@@ -21,7 +22,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Fire_Implementation(FVector Reticle, FVector Direction) override;
-
+	
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<UArrowComponent> _Arrow;
+	TObjectPtr<UArrowComponent> _Muzzle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AProjectile> _ProjectileClass;
 };
