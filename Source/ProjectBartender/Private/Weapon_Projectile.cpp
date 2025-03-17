@@ -20,14 +20,10 @@ AWeapon_Projectile::AWeapon_Projectile()
 void AWeapon_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-void AWeapon_Projectile::Fire_Implementation(FVector Reticle, FVector Direction)
+void AWeapon_Projectile::Fire(FVector Reticle, FVector Direction)
 {
-	Super::Fire_Implementation(Reticle, Direction);
-	UE_LOG(LogTemp, Warning, TEXT("PROJECTILE"));
-
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }
 	FActorSpawnParameters spawnParams;
@@ -36,5 +32,6 @@ void AWeapon_Projectile::Fire_Implementation(FVector Reticle, FVector Direction)
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	world->SpawnActor(_ProjectileClass, &_Muzzle->GetComponentTransform(), spawnParams);
 }
+
 
 

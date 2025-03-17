@@ -15,13 +15,18 @@ public:
 	// Sets default values for this actor's properties
 	AWeapon_Base();
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void Fire(FVector Reticle, FVector Direction);
-	virtual void Fire_Implementation(FVector Reticle, FVector Direction);
+	UFUNCTION(BlueprintCallable)
+	void StartFiring(FVector Reticle, FVector Direction);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Reload();
 	UFUNCTION(BlueprintCallable)
 	void StopFiring();
+
+	UFUNCTION()
+	void ResetCooldown();
+	UFUNCTION()
+	virtual void Fire(FVector Reticle, FVector Direction);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,10 +34,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> _Mesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float FireRange = 1000;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float FireRange = 2000;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Damage = 10;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float FireRate = 1;
 
 	//Ammo variables for reloading and storing data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
@@ -42,5 +49,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int TotalAmmo; //Ammo in player inventory
 
-	
+	bool GunCooldown = false;
+	FTimerHandle _CooldownResetTimer;
+
 };
