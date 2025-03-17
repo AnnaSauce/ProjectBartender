@@ -5,7 +5,6 @@
 
 #include "Projectile.h"
 #include "Components/ArrowComponent.h"
-#include "Tasks/GameplayTask_SpawnActor.h"
 
 
 // Sets default values
