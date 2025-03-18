@@ -23,7 +23,7 @@ AProjectile::AProjectile()
 	_ProjectileMovement->bRotationFollowsVelocity = true;
 	_ProjectileMovement->bShouldBounce = false;
 
-	InitialLifeSpan = 3.f;
+	InitialLifeSpan = 2.f;
 }
 
 // Called when the game starts or when spawned
