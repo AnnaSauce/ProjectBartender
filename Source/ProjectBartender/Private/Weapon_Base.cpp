@@ -15,11 +15,19 @@ AWeapon_Base::AWeapon_Base()
 void AWeapon_Base::BeginPlay()
 {
 	Super::BeginPlay();
+	UWorld* const world = GetWorld();
 }
 
-void AWeapon_Base::Fire_Implementation(FVector Reticle, FVector Direction)
+void AWeapon_Base::StartFiring(FVector Reticle, FVector Direction)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire_Implementation"));
+	if(AmmoInClip > 0 && !GunCooldown)
+	{
+		GunCooldown = true;
+		AmmoInClip--;
+		Fire(Reticle, Direction);
+		GetWorld()->GetTimerManager().SetTimer(_CooldownResetTimer, this, &AWeapon_Base::ResetCooldown, 1/FireRate, true);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Ammo Left: %d"), AmmoInClip);
 }
 
 void AWeapon_Base::Reload_Implementation()
@@ -33,12 +41,20 @@ void AWeapon_Base::Reload_Implementation()
 		TotalAmmo -= ammoNeeded;
 		AmmoInClip = ClipCapacity;
 	}*/
-	
-	
-	UE_LOG(LogTemp, Warning, TEXT("Reload"));
 }
 
 void AWeapon_Base::StopFiring()
 {
+}
+
+void AWeapon_Base::ResetCooldown()
+{
+	GunCooldown = false;
+}
+
+void AWeapon_Base::Fire(FVector Reticle, FVector Direction)
+{
 	
 }
+
+

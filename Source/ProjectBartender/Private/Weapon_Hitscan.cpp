@@ -20,23 +20,21 @@ void AWeapon_Hitscan::BeginPlay()
 	
 }
 
-void AWeapon_Hitscan::Fire_Implementation(FVector Reticle, FVector Direction)
+void AWeapon_Hitscan::Fire(FVector Reticle, FVector Direction)
 {
-	Super::Fire_Implementation(Reticle, Direction);
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }
-
+	
 	FHitResult hit(ForceInit);
 	FVector start = Reticle;
-	FVector end = start + (Direction*1000);
+	FVector end = Reticle+(Direction*FireRange);
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), false, ActorsToIgnore,
-		EDrawDebugTrace::None, hit, true, FLinearColor::Red,
+		EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
 		FLinearColor::Green, 1))
 	{
-		
 		if(hit.GetActor())
 		{
 			UGameplayStatics::ApplyDamage(hit.GetActor(), Damage,
@@ -45,6 +43,4 @@ void AWeapon_Hitscan::Fire_Implementation(FVector Reticle, FVector Direction)
 		}
 	}
 }
-
-
 
