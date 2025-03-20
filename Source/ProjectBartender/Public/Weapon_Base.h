@@ -19,13 +19,13 @@ public:
 	void StartFiring(FVector Reticle, FVector Direction);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Reload();
-	UFUNCTION(BlueprintCallable)
-	void StopFiring();
+	
 
 	UFUNCTION()
 	void ResetCooldown();
-	UFUNCTION()
-	virtual void Fire(FVector Reticle, FVector Direction);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Fire(FVector Reticle, FVector Direction);
+	virtual void Fire_Implementation(FVector Reticle, FVector Direction);
 	
 protected:
 	// Called when the game starts or when spawned

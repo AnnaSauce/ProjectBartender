@@ -3,13 +3,16 @@
 
 #include "Weapon_Base.h"
 
-
 // Sets default values
 AWeapon_Base::AWeapon_Base()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	_Mesh->SetupAttachment(RootComponent);
+}
+
+void AWeapon_Base::Fire_Implementation(FVector Reticle, FVector Direction)
+{
 }
 
 void AWeapon_Base::BeginPlay()
@@ -20,14 +23,17 @@ void AWeapon_Base::BeginPlay()
 
 void AWeapon_Base::StartFiring(FVector Reticle, FVector Direction)
 {
+	//If the gun has ammo, allow it to fire.
 	if(AmmoInClip > 0 && !GunCooldown)
 	{
 		GunCooldown = true;
 		AmmoInClip--;
-		Fire(Reticle, Direction);
+		Fire(Reticle, Direction); //Animation trigger might need to be called through this function
+
+		//Set a timer for the weapon cooldown. The time is 1/x so that the higher the rate is, the faster it shoots.
 		GetWorld()->GetTimerManager().SetTimer(_CooldownResetTimer, this, &AWeapon_Base::ResetCooldown, 1/FireRate, true);
+		
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Ammo Left: %d"), AmmoInClip);
 }
 
 void AWeapon_Base::Reload_Implementation()
@@ -43,18 +49,9 @@ void AWeapon_Base::Reload_Implementation()
 	}*/
 }
 
-void AWeapon_Base::StopFiring()
-{
-}
-
 void AWeapon_Base::ResetCooldown()
 {
 	GunCooldown = false;
-}
-
-void AWeapon_Base::Fire(FVector Reticle, FVector Direction)
-{
-	
 }
 
 

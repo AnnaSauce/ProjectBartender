@@ -22,7 +22,7 @@ void AWeapon_Projectile::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AWeapon_Projectile::Fire(FVector Reticle, FVector Direction)
+void AWeapon_Projectile::Fire_Implementation(FVector Reticle, FVector Direction)
 {
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }
