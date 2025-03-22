@@ -4,35 +4,47 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Weapon_Base.generated.h"
-
+#include "Weapon.generated.h"
+class AProjectile;
+class UArrowComponent;
 UCLASS()
-class PROJECTBARTENDER_API AWeapon_Base : public AActor
+class PROJECTBARTENDER_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AWeapon_Base();
+	AWeapon();
 	
-	UFUNCTION(BlueprintCallable)
-	void StartFiring(FVector Reticle, FVector Direction);
+	
+	
+	//Attempt to fire
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	bool TryFiring(FVector Reticle, FVector Direction);
+
+	//Blueprint event intended to trigger one of the shooting mechanics
+	UFUNCTION(BlueprintNativeEvent, Category = "Shooting")
+	void OnFire();
+	
+	//Different ways of shooting
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	void Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float MaxSpread);
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	void Fire_Hitscan_Single();
+	UFUNCTION(BlueprintCallable, Category = "Shooting")
+	void Fire_Projectile(TSubclassOf<AProjectile> projectile);
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Reload();
-	
-
 	UFUNCTION()
 	void ResetCooldown();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void Fire(FVector Reticle, FVector Direction);
-	virtual void Fire_Implementation(FVector Reticle, FVector Direction);
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UStaticMeshComponent> _Mesh;
+	TObjectPtr<USkeletalMeshComponent> _Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float FireRange = 2000;
@@ -49,7 +61,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int TotalAmmo; //Ammo in player inventory
 
+	
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UArrowComponent> _Muzzle;
+private:
+	FVector Reticle;
+	FVector Direction;
+
 	bool GunCooldown = false;
 	FTimerHandle _CooldownResetTimer;
-
 };

@@ -18,6 +18,8 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Damage;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,6 +31,5 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UProjectileMovementComponent> _ProjectileMovement;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float _Damage;
+	
 };
