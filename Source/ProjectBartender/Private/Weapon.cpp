@@ -49,15 +49,7 @@ void AWeapon::OnFire_Implementation()
 
 void AWeapon::Reload_Implementation()
 {
-	AmmoInClip = ClipCapacity; //Delete this line if stored ammo will be used.
-	
-	//Below commented code is for if there will be stored ammo as for now there is no ammo inventory
-	/*int ammoNeeded = ClipCapacity - AmmoInClip;
-	if(TotalAmmo >= ammoNeeded)
-	{
-		TotalAmmo -= ammoNeeded;
-		AmmoInClip = ClipCapacity;
-	}*/
+	AmmoInClip = ClipCapacity;
 }
 
 void AWeapon::ResetCooldown()
