@@ -28,9 +28,9 @@ public:
 	
 	//Different ways of shooting
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float MaxSpread);
+	void Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float MaxSpread, bool& CriticalHit, AActor*& ActorHit);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Hitscan_Single();
+	void Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
 	void Fire_Projectile(TSubclassOf<AProjectile> projectile);
 	
@@ -58,10 +58,6 @@ protected:
 	int AmmoInClip; //Ammo in the gun
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	int ClipCapacity; //How much the gun can hold
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	int TotalAmmo; //Ammo in player inventory
-
-	
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UArrowComponent> _Muzzle;
@@ -71,4 +67,5 @@ private:
 
 	bool GunCooldown = false;
 	FTimerHandle _CooldownResetTimer;
+	
 };
