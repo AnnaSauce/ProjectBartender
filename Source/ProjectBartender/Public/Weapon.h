@@ -5,9 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
+
 class AProjectile;
 class UArrowComponent;
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTBARTENDER_API AWeapon : public AActor
 {
 	GENERATED_BODY()
@@ -20,7 +21,7 @@ public:
 	
 	//Attempt to fire
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	bool TryFiring(FVector Reticle, FVector Direction);
+	bool TryFiring(FVector Reticle, FVector Direction, int timesToRicochet);
 
 	//Blueprint event intended to trigger one of the shooting mechanics
 	UFUNCTION(BlueprintNativeEvent, Category = "Shooting")
@@ -61,6 +62,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UArrowComponent> _Muzzle;
+
 private:
 	FVector Reticle;
 	FVector Direction;

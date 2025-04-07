@@ -24,7 +24,7 @@ void AWeapon::BeginPlay()
 	Super::BeginPlay();
 }
 
-bool AWeapon::TryFiring(FVector start, FVector forward)
+bool AWeapon::TryFiring(FVector start, FVector forward, int timesToRicochet)
 {
 	//If the gun has ammo, allow it to fire.
 	if(AmmoInClip > 0 && !GunCooldown)
