@@ -47,7 +47,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> _Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float FireRange = 2000;
+	float FireRange = 12000;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Damage = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
