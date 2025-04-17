@@ -101,22 +101,30 @@ void AWeapon::Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float Max
 	
 }
 
-void AWeapon::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent)
+void AWeapon::Fire_Hitscan_Single(TArray<AActor*> ActorsToIgnore, AActor* ricochetTarget,
+	bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent)
 {
-	//Reset Values
-	ActorHit = nullptr;
+	//Reset Vaues
 	HitComponent = nullptr;
 	CriticalHit = false;
 	
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }
-
+	FVector start;
+	FVector end;
 	//Set parameters for new line trace
 	FHitResult hit(ForceInit);
-	FVector start = Reticle;
-	FVector end = Reticle+(Direction*FireRange);
-	TArray<AActor*> ActorsToIgnore;
-	ActorsToIgnore.Add(GetOwner());
+	if(ricochetTarget == nullptr)
+	{
+		start = Reticle;
+		end = Reticle+(Direction*FireRange);
+	}
+	else
+	{
+		start = ActorHit->GetActorLocation();
+		end  = ricochetTarget->GetActorLocation();
+	}
+	ActorHit = nullptr;
 
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
@@ -142,7 +150,7 @@ void AWeapon::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimiti
 	}
 }
 
-void AWeapon::Fire_Projectile(TSubclassOf<AProjectile> projectile)
+void AWeapon::Fire_Projectile(TSubclassOf<AProjectile> projectile, FVector direction)
 {
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }

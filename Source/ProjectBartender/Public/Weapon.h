@@ -17,8 +17,6 @@ public:
 	// Sets default values for this actor's properties
 	AWeapon();
 	
-	
-	
 	//Attempt to fire
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
 	bool TryFiring(FVector Reticle, FVector Direction, int timesToRicochet);
@@ -31,9 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
 	void Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float MaxSpread, bool& CriticalHit, AActor*& ActorHit);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent);
+	void Fire_Hitscan_Single(TArray<AActor*> ActorsToIgnore, AActor* ricochetTarget,
+		bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Projectile(TSubclassOf<AProjectile> projectile);
+	void Fire_Projectile(TSubclassOf<AProjectile> projectile, FVector direction);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Reload();
@@ -53,6 +52,8 @@ protected:
 	float Damage = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float FireRate = 1;
+	UPROPERTY(BlueprintReadWrite)
+	int RicochetAmount;
 
 	//Ammo variables for reloading and storing data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
@@ -67,6 +68,8 @@ private:
 	FVector Reticle;
 	FVector Direction;
 
+	
+	
 	bool GunCooldown = false;
 	FTimerHandle _CooldownResetTimer;
 	
