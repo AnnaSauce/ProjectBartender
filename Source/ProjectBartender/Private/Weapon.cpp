@@ -3,6 +3,7 @@
 
 #include "Weapon.h"
 
+#include "FileCache.h"
 #include "Projectile.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -33,7 +34,7 @@ bool AWeapon::TryFiring(FVector start, FVector forward, int timesToRicochet)
 		Reticle = start;
 		Direction = forward;
 		AmmoInClip--;
-		OnFire(); //Animation trigger might need to be called through this function
+		OnFire(timesToRicochet); //Animation trigger might need to be called through this function
 
 		//Set a timer for the weapon cooldown. The time is 1/x so that the higher the rate is, the faster it shoots.
 		GetWorld()->GetTimerManager().SetTimer(_CooldownResetTimer, this, &AWeapon::ResetCooldown, 1/FireRate, true);
@@ -42,10 +43,7 @@ bool AWeapon::TryFiring(FVector start, FVector forward, int timesToRicochet)
 	return false;
 }
 
-void AWeapon::OnFire_Implementation()
-{
-	//return false;
-}
+void AWeapon::OnFire_Implementation(int timesToRicochet){return;}
 
 void AWeapon::Reload_Implementation()
 {
@@ -69,8 +67,6 @@ void AWeapon::Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float Max
 	FVector end = Reticle+(Direction*FireRange);
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
-
-	int BulletsHit = 0;
 	
 	for(int i = 0; i < BulletsPerShot; i++)
 	{
@@ -82,7 +78,7 @@ void AWeapon::Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float Max
 		
 		if(UKismetSystemLibrary::LineTraceSingle(world, start, newEnd,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-		EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+		DrawDebugType, hit, true, FLinearColor::Red,
 		FLinearColor::Green, 1))
 		{
 			if(hit.GetComponent()->ComponentHasTag(FName("Critical")))
@@ -101,51 +97,71 @@ void AWeapon::Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float Max
 	
 }
 
-void AWeapon::Fire_Hitscan_Single(TArray<AActor*> ActorsToIgnore, AActor* ricochetTarget,
-	bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent)
+void AWeapon::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit)
 {
 	//Reset Vaues
-	HitComponent = nullptr;
 	CriticalHit = false;
-	
+	ActorHit = nullptr;
+
+	//Set parameters for new line trace
 	UWorld* const world = GetWorld();
 	if(world == nullptr) { return; }
 	FVector start;
 	FVector end;
-	//Set parameters for new line trace
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwner());
 	FHitResult hit(ForceInit);
-	if(ricochetTarget == nullptr)
-	{
-		start = Reticle;
-		end = Reticle+(Direction*FireRange);
-	}
-	else
-	{
-		start = ActorHit->GetActorLocation();
-		end  = ricochetTarget->GetActorLocation();
-	}
-	ActorHit = nullptr;
+	start = Reticle;
+	end = Reticle+(Direction*FireRange);
 
+	
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-		EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+		DrawDebugType, hit, true, FLinearColor::Red,
 		FLinearColor::Green, 1))
 	{
 		//Check if line hit an actor
-		if(hit.GetActor())
+		if(hit.GetActor()->ActorHasTag("Enemy"))
 		{
-			HitComponent = hit.GetComponent();
+			
 			if(hit.GetComponent()->ComponentHasTag(FName("Critical")))
 			{
 				CriticalHit = true;
 				Damage*=2;
 			}
-			
 			//Apply damage
 			UGameplayStatics::ApplyDamage(hit.GetActor(), Damage,
 			GetOwner()->GetInstigatorController(), GetOwner(),
 			UDamageType::StaticClass());
+
+			//Return the actor that was hit
 			ActorHit = hit.GetActor();
+		}
+	}
+}
+
+void AWeapon::Fire_Hitscan_Ricochet(FVector RicochetStart, AActor* TargetActor, TArray<AActor*> ActorsToIgnore, bool& Success)
+{
+	//Reset success state
+	Success = false;
+
+	//Set parameters for new line trace
+	UWorld* const world = GetWorld();
+	if(world == nullptr) { return; }
+	FHitResult hit(ForceInit);
+	ActorsToIgnore.Add(GetOwner());
+	if(UKismetSystemLibrary::LineTraceSingle(world, RicochetStart, TargetActor->GetActorLocation(),
+    		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
+    		DrawDebugType, hit, true, FLinearColor::Red,
+    		FLinearColor::Green, 2))
+	{
+		if(hit.GetActor() == TargetActor)
+		{
+			//Only damage and continue to ricochet if the line wasn't interrupted on the way
+			UGameplayStatics::ApplyDamage(hit.GetActor(), Damage,
+			GetOwner()->GetInstigatorController(), GetOwner(),
+			UDamageType::StaticClass());
+			Success = true;
 		}
 	}
 }
