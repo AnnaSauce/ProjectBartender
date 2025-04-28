@@ -114,7 +114,7 @@ void AWeapon::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimiti
 	//Set parameters for new line trace
 	FHitResult hit(ForceInit);
 	FVector start = Reticle;
-	FVector end = Reticle+(Direction*FireRange);
+	FVector end = Reticle+(Direction*FireRange*3.0f);
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
 
