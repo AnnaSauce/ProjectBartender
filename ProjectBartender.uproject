@@ -26,10 +26,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "TcpMessaging",
-			"Enabled": false
-		},
-		{
 			"Name": "UdpMessaging",
 			"Enabled": false
 		},
@@ -48,6 +44,10 @@
 		{
 			"Name": "Water",
 			"Enabled": true
+		},
+		{
+			"Name": "TcpMessaging",
+			"Enabled": false
 		}
 	]
 }
