@@ -85,7 +85,7 @@ void UWeaponComponent::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit)
 	
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-		EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+		DrawDebugType, hit, true, FLinearColor::Red,
 		FLinearColor::Green, 1))
 	{
 		//Check if line hit an actor
@@ -120,7 +120,7 @@ void UWeaponComponent::Fire_Hitscan_Ricochet(FVector RicochetStart, AActor* Targ
 	ActorsToIgnore.Add(GetOwner());
 	if(UKismetSystemLibrary::LineTraceSingle(world, RicochetStart, TargetActor->GetActorLocation(),
 			UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-			EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+			DrawDebugType, hit, true, FLinearColor::Red,
 			FLinearColor::Green, 2))
 	{
 		if(hit.GetActor() == TargetActor)
