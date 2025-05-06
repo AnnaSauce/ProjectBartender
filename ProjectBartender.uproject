@@ -26,10 +26,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "TcpMessaging",
-			"Enabled": false
-		},
-		{
 			"Name": "UdpMessaging",
 			"Enabled": false
 		},
@@ -44,6 +40,14 @@
 		{
 			"Name": "PCGGeometryScriptInterop",
 			"Enabled": true
+		},
+		{
+			"Name": "Water",
+			"Enabled": true
+		},
+		{
+			"Name": "TcpMessaging",
+			"Enabled": false
 		}
 	]
 }
