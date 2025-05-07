@@ -68,7 +68,7 @@ protected:
 	TObjectPtr<UArrowComponent> _Muzzle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType;
+	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType = EDrawDebugTrace::None;
 
 private:
 	FVector Reticle;
