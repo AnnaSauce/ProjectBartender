@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Weapon.generated.h"
+
 class AProjectile;
 class UArrowComponent;
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTBARTENDER_API AWeapon : public AActor
 {
 	GENERATED_BODY()
@@ -16,29 +18,29 @@ public:
 	// Sets default values for this actor's properties
 	AWeapon();
 	
-	
-	
 	//Attempt to fire
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	bool TryFiring(FVector Reticle, FVector Direction);
+	bool TryFiring(FVector Reticle, FVector Direction, int timesToRicochet);
 
 	//Blueprint event intended to trigger one of the shooting mechanics
 	UFUNCTION(BlueprintNativeEvent, Category = "Shooting")
-	void OnFire();
+	void OnFire(int timesToRicochet);
 	
 	//Different ways of shooting
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
 	void Fire_Hitscan_Spread(int BulletsPerShot, float MinSpread, float MaxSpread, bool& CriticalHit, AActor*& ActorHit);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit, UPrimitiveComponent*& HitComponent);
+	void Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit);
+	UFUNCTION(BlueprintCallable, Category= "Shooting")
+	void Fire_Hitscan_Ricochet(FVector RicochetStart, AActor* TargetActor, TArray<AActor*> ActorsToIgnore, bool& Success);
 	UFUNCTION(BlueprintCallable, Category = "Shooting")
-	void Fire_Projectile(TSubclassOf<AProjectile> projectile);
+	void Fire_Projectile(TSubclassOf<AProjectile> projectile, FVector direction);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Reload();
 	UFUNCTION()
 	void ResetCooldown();
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -52,6 +54,9 @@ protected:
 	float Damage = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float FireRate = 1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool GunCooldown = false;
+	
 
 	//Ammo variables for reloading and storing data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
@@ -61,11 +66,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UArrowComponent> _Muzzle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType = EDrawDebugTrace::None;
+
 private:
 	FVector Reticle;
 	FVector Direction;
-
-	bool GunCooldown = false;
+	
 	FTimerHandle _CooldownResetTimer;
 	
 };
