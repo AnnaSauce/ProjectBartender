@@ -36,14 +36,14 @@ bool UWeaponComponent::TryFiring(FVector start, FVector forward, EGrade grade)
 				timesToRicochet = 0;
 				break;
 		}
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Shot, GetOwner()->GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Shot, GetOwner()->GetActorLocation(), 1.0f, 1.0f, 0.4f);
 		OnFire(timesToRicochet); //Animation trigger might need to be called through this function
 		
 		//Set a timer for the weapon cooldown. The time is 1/x so that the higher the rate is, the faster it shoots.
 		GetWorld()->GetTimerManager().SetTimer(_CooldownResetTimer, this, &UWeaponComponent::ResetCooldown, 1/FireRate, true);
 		return true;
 	}
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), FailedShot, GetOwner()->GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), FailedShot, GetOwner()->GetActorLocation(), 1.0f, 1.0f, 0.4f);
 	return false;
 }
 
@@ -85,7 +85,7 @@ void UWeaponComponent::Fire_Hitscan_Single(bool& CriticalHit, AActor*& ActorHit)
 	
 	if(UKismetSystemLibrary::LineTraceSingle(world, start, end,
 		UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-		EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+		DrawDebugType, hit, true, FLinearColor::Red,
 		FLinearColor::Green, 1))
 	{
 		//Check if line hit an actor
@@ -120,7 +120,7 @@ void UWeaponComponent::Fire_Hitscan_Ricochet(FVector RicochetStart, AActor* Targ
 	ActorsToIgnore.Add(GetOwner());
 	if(UKismetSystemLibrary::LineTraceSingle(world, RicochetStart, TargetActor->GetActorLocation(),
 			UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel3), false, ActorsToIgnore,
-			EDrawDebugTrace::Persistent, hit, true, FLinearColor::Red,
+			DrawDebugType, hit, true, FLinearColor::Red,
 			FLinearColor::Green, 2))
 	{
 		if(hit.GetActor() == TargetActor)

@@ -67,10 +67,14 @@ protected:
 	USoundBase* Shot;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* FailedShot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType;
 private:
 	FVector Reticle;
 	FVector Direction;
 	
 	FTimerHandle _CooldownResetTimer;
-
+	
+	
 };
