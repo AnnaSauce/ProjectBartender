@@ -36,14 +36,14 @@ bool UWeaponComponent::TryFiring(FVector start, FVector forward, EGrade grade)
 				timesToRicochet = 0;
 				break;
 		}
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Shot, GetOwner()->GetActorLocation(), 1.0f, 1.0f, 0.4f);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Shot, GetOwner()->GetActorLocation(), SFXVolume, 1.0f, 0.2f);
 		OnFire(timesToRicochet); //Animation trigger might need to be called through this function
 		
 		//Set a timer for the weapon cooldown. The time is 1/x so that the higher the rate is, the faster it shoots.
 		GetWorld()->GetTimerManager().SetTimer(_CooldownResetTimer, this, &UWeaponComponent::ResetCooldown, 1/FireRate, true);
 		return true;
 	}
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), FailedShot, GetOwner()->GetActorLocation(), 1.0f, 1.0f, 0.4f);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), FailedShot, GetOwner()->GetActorLocation(), SFXVolume, 1.0f, 0.4f);
 	return false;
 }
 

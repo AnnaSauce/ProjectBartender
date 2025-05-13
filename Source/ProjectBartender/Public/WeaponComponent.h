@@ -51,6 +51,8 @@ protected:
 	float Damage = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float FireRate = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float SFXVolume = 1;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool GunCooldown = false;
 	
